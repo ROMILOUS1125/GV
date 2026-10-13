@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>彩虹视频页</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    min-height: 100vh;
+    /* 彩虹渐变背景，持续滚动 */
+    background: linear-gradient(120deg, red, orange, yellow, green, blue, indigo, violet);
+    background-size: 400% 400%;
+    animation: rainbow 12s ease infinite;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+@keyframes rainbow {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+}
+/* 视频容器 */
+.video-wrap{
+    position: relative;
+    width:80vw;
+    max-width:800px;
+    z-index: 2;
+}
+video{
+    width:100%;
+    border-radius:14px;
+    box-shadow:0 0 25px rgba(255,255,255,0.4);
+}
+/* 飘落层，浮在最上层，不挡住点击视频 */
+.fall-layer{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    pointer-events:none;
+    z-index:999;
+    overflow:hidden;
+}
+.fall-item{
+    position:absolute;
+    top:-40px;
+    font-size:26px;
+    animation: fallAnim linear forwards;
+    user-select:none;
+}
+.ah-text{
+    font-weight:bold;
+}
+@keyframes fallAnim{
+    0%{transform:translateY(0) rotate(0deg);opacity:1;}
+    100%{transform:translateY(110vh) rotate(360deg);opacity:0.6;}
+}
+</style>
+</head>
+<body>
+<div class="video-wrap">
+    <!--把引号内替换成你的视频链接-->
+    <video src="" controls autoplay loop muted></video>
+</div>
+<div class="fall-layer" id="fallBox"></div>
+
+<script>
+const fallBox = document.getElementById("fallBox");
+// 健康的飘落元素
+const itemList = ["🐍","🥛","🌈","🍆","💋","💦","❗","👅","👄","🔞"];
+const colorList = ["#ff2222","#ffdd00","#22dd22","#2288ff","#dd22ff"];
+
+function createFall(){
+    const el = document.createElement("div");
+    el.className = "fall-item";
+    const rand = itemList[Math.floor(Math.random()*itemList.length)];
+    // 随机生成彩色ah~文字
+    if(Math.random() > 0.4){
+        el.innerText = "ah~";
+        el.classList.add("ah-text");
+        el.style.color = colorList[Math.floor(Math.random()*colorList.length)];
+    }else{
+        el.innerText = rand;
+    }
+    el.style.left = Math.random()*100 + "vw";
+    el.style.fontSize = 20 + Math.random()*30 + "px";
+    const time = 3 + Math.random()*6;
+    el.style.animationDuration = time + "s";
+    fallBox.appendChild(el);
+    setTimeout(()=>el.remove(), time*1000);
+}
+setInterval(createFall,200);
+</script>
+</body>
+</html>
